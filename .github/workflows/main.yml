@@ -38,7 +38,7 @@ jobs:
           target: "~/app/api-goBarber"
 
    
-    - name: Install dependecies on Digital Ocean
+    - name: Run production scripst 
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -48,26 +48,11 @@ jobs:
         script: |
           cd ~/app/api-goBarber
           yarn
-     
-    - name: Run migration on Digital Ocean
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{secrets.SSH_KEY}}
-        script: |
-          cd ~/app/api-goBarber
           ./node_modules/.bin/typeorm migration:run
+          pm2 restart goBarber-api
+     
+    
           
-    - name: Run migration on Digital Ocean
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{secrets.SSH_KEY}}
-        script: pm2 restart gobarber-api
 
 
 
